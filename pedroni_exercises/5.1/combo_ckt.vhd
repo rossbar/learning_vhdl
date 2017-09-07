@@ -8,8 +8,9 @@ END ENTITY ckt;
 
 ARCHITECTURE selector OF ckt IS
 BEGIN
-    y <= "01" WHEN x(2)='0' ELSE
-         "00" WHEN x(1)='0' ELSE
-         "10" WHEN x(0)='1';
+    y <= "01" WHEN x(2 DOWNTO 1)="00" ELSE
+         "00" WHEN x(2 DOWNTO 1)="10" ELSE
+         "10" WHEN x="111" ELSE
+         "--";
 END ARCHITECTURE selector;
 
