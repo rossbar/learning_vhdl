@@ -1,0 +1,7 @@
+ssd[6] -> lower left
+ssd[5] -> bottom
+ssd[4] -> lower right
+ssd[3] -> upper right
+ssd[2] -> middle
+ssd[1] -> upper left
+ssd[0] -> top
