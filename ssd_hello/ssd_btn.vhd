@@ -33,7 +33,7 @@ BEGIN
     ---------------------------
     WITH value SELECT
         ssd <= "0000Z00" WHEN 0,
-               "0ZZZZ0Z" WHEN 1,
+               "ZZ00ZZZ" WHEN 1,
                "00Z00Z0" WHEN 2,
                "Z0000Z0" WHEN 3,
                "ZZ0000Z" WHEN 4,
