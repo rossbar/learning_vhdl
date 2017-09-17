@@ -1,7 +1,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-LIBRARY work;
-USE work.my_ssd_driver.all;
+USE ieee.std_logic_unsigned.all;
 -- DEBOUNCER COMPONENT
 -------------------------------------------------------------------------------
 ENTITY debouncer IS
@@ -18,9 +17,9 @@ ARCHITECTURE debounce OF debouncer IS
     SIGNAL ctr: STD_LOGIC_VECTOR(ctr_bitlen DOWNTO 0) := (OTHERS => '0'); -- Initialize ctr to 0
 BEGIN
     -- Reset counter if btn[clk-1] != btn[clk]
-    ctr_reset = flipflops(1) XOR flipflops(0);
+    ctr_reset <= flipflops(1) XOR flipflops(0);
 
-    compare_signal: PROCESS(clk)
+    PROCESS(clk)
     BEGIN
         IF (clk'EVENT AND clk='1') THEN
             flipflops(0) <= btn;
@@ -28,14 +27,18 @@ BEGIN
             IF ctr_reset='1' THEN               -- Stored signals different, reset
                 ctr <= (OTHERS => '0');
             ELSIF(ctr(ctr_bitlen)='0') THEN     -- Not at termination cond. yet
-                ctr = ctr + 1;
+                ctr <= ctr + 1;
             ELSE
                 dbcd_res <= flipflops(1);
             END IF;
         END IF;
-    END PROCESS compare_signals;
+    END PROCESS;
 END ARCHITECTURE debounce;
-
+-------------------------------------------------------------------------------
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+LIBRARY work;
+USE work.my_ssd_driver.all;
 -- MAIN
 -------------------------------------------------------------------------------
 ENTITY ssd_btn IS
