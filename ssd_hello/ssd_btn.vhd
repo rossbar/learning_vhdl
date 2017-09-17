@@ -46,25 +46,32 @@ END ENTITY ssd_btn;
 -------------------------------------------------------------------------------
 ARCHITECTURE show_all OF ssd_btn IS
     SHARED VARIABLE value: INTEGER RANGE 0 TO 9 := 0;
+    SIGNAL debounced_buttons: STD_LOGIC_VECTOR(1 DOWNTO 0);
     SIGNAL last_button_state : STD_LOGIC := '0';
+    COMPONENT debouncer IS
+        PORT(clk, btn: IN STD_LOGIC; dbcd_res: OUT STD_LOGIC);
+    END COMPONENT debouncer;
 BEGIN
+    -- Debounced button signals
+    dbcd_btn_0: debouncer PORT MAP (sysclk, btn(0), debounced_buttons(0));
+    dbcd_btn_1: debouncer PORT MAP (sysclk, btn(1), debounced_buttons(1));
     button_process: PROCESS (sysclk)
     BEGIN
         IF (rising_edge(sysclk)) THEN
-            IF (btn(1)='1' AND last_button_state='0') THEN
+            IF (debounced_buttons(1)='1' AND last_button_state='0') THEN
                 IF (value=9) THEN
                     value := 0;
                 ELSE
                     value := value + 1;
                 END IF;
-            ELSIF (btn(0)='1' AND last_button_state='0') THEN
+            ELSIF (debounced_buttons(0)='1' AND last_button_state='0') THEN
                 IF (value=0) THEN
                     value := 9;
                 ELSE
                     value := value - 1;
                 END IF;
             END IF;
-            last_button_state <= (btn(0) OR btn(1));
+            last_button_state <= (debounced_buttons(0) OR debounced_buttons(1));
         END IF;
     END PROCESS button_process;
     -- Convert to TTL signal for SSD
