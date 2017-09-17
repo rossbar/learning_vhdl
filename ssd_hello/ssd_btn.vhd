@@ -1,5 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
+LIBRARY work;
+USE work.my_ssd_driver.all;
 -------------------------------------------------------------------------------
 ENTITY ssd_btn IS
     PORT(sysclk: IN STD_LOGIC;
@@ -30,17 +32,6 @@ BEGIN
             last_button_state <= (btn(0) OR btn(1));
         END IF;
     END PROCESS button_process;
-    ---------------------------
-    WITH value SELECT
-        ssd <= "0000Z00" WHEN 0,
-               "ZZ00ZZZ" WHEN 1,
-               "00Z00Z0" WHEN 2,
-               "Z0000Z0" WHEN 3,
-               "ZZ0000Z" WHEN 4,
-               "Z00Z000" WHEN 5,
-               "000Z000" WHEN 6,
-               "ZZ00ZZ0" WHEN 7,
-               "0000000" WHEN 8,
-               "ZZ00000" WHEN 9,
-               "Z0ZZ0Z0" WHEN OTHERS;
+    -- Convert to TTL signal for SSD
+    ssd <= val_to_ssd_signal(value);
 END ARCHITECTURE show_all;
