@@ -45,11 +45,10 @@ begin
          a <= patterns(i).a;
          b <= patterns(i).b;
          c <= patterns(i).c;
-         z <= patterns(i).z;
          --  Wait for the results.
          wait for 1 ns;
          --  Check the outputs.
-         assert ckt_0(a, b, c) = z;
+         assert z = patterns(i).z
             report "bad x value" severity error;
       end loop;
       assert false report "end of test" severity note;
